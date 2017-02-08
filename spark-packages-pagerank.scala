@@ -1,15 +1,16 @@
-/*
-* r
+/** the goal of this snippet is to get one meaningful calculation from graphx
+* data csv and motivation comes from http://kgullikson88.github.io/blog/static/PyPiAnalyzer.html
+* 
+* some next steps:
+* + validate the results
+* + use GraphFrames
+* + look into titan + hbase for dynamic graphs
 */
 object Cells {
-  import org.apache.spark.SparkConf
-  import org.apache.spark.SparkContext
   import org.apache.spark.graphx.GraphLoader
   import scala.util.hashing.{MurmurHash3=>MH3}
   import org.apache.spark.graphx.Graph
   import org.apache.spark.rdd.RDD
-  import org.apache.spark.graphx._
-  import org.apache.spark.sql.functions._
   
   val session = org.apache.spark.sql.SparkSession.builder
           .master("local")
@@ -49,6 +50,9 @@ object Cells {
     .sortBy(_._2._1, ascending=false)
     .map(x=>(x._2._1,x._2._2))
 
+  // top packages are expected though key ones like django and sphinx are missing
+  // methods and input need to be rechecked
+  // page rank values are greater > 1. normalize?
   ranksAndPackageNames.take(100)
 }
                   
